@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — HomeRent Pro</title>
+  <meta name="description" content="Sign in to your HomeRent Pro account to manage properties, bookings, and more.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    /* ─── Auth Flow Steps ──────────────────────────────────────────────── */
+    .auth-step {
+      display: none;
+      animation: stepSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .auth-step.active {
+      display: block;
+    }
+
+    @keyframes stepSlideIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Step Indicator ───────────────────────────────────────────────── */
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 32px;
+    }
+
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      transition: all 0.3s ease;
+      background: var(--bg-elevated);
+      color: var(--text-dim);
+      border: 1px solid var(--border-color);
+    }
+
+    .step-pill.active {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--primary-light);
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.08);
+    }
+
+    .step-pill.completed {
+      background: rgba(16, 185, 129, 0.08);
+      color: var(--primary);
+      border-color: rgba(16, 185, 129, 0.15);
+    }
+
+    .step-pill .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 800;
+      background: var(--bg-hover);
+      color: var(--text-dim);
+      transition: all 0.3s ease;
+    }
+
+    .step-pill.active .step-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .step-pill.completed .step-num {
+      background: var(--primary-dark);
+      color: white;
+    }
+
+    .step-connector-line {
+      width: 40px;
+      height: 2px;
+      background: var(--border-color);
+      transition: background 0.3s ease;
+    }
+
+    .step-connector-line.completed {
+      background: var(--primary);
+    }
+
+    /* ─── Role Cards (enhanced for auth-only) ──────────────────────────── */
+    .role-selector-auth {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .role-card {
+      position: relative;
+      padding: 28px 20px;
+      background: var(--bg-elevated);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .role-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gradient-card-hover);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .role-card:hover {
+      border-color: var(--text-dim);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .role-card:hover::before {
+      opacity: 1;
+    }
+
+    .role-card.selected {
+      border-color: var(--primary);
+      background: rgba(16, 185, 129, 0.06);
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.1);
+    }
+
+    .role-card.selected::before {
+      opacity: 1;
+      background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(99,102,241,0.04));
+    }
+
+    .role-card-icon {
+      position: relative;
+      z-index: 1;
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      font-size: 1.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .role-card[data-role="tenant"] .role-card-icon {
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--accent-light);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+    }
+
+    .role-card[data-role="owner"] .role-card-icon {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--primary-light);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+    }
+
+    .role-card.selected .role-card-icon {
+      transform: scale(1.08);
+    }
+
+    .role-card-title {
+      position: relative;
+      z-index: 1;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .role-card-desc {
+      position: relative;
+      z-index: 1;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .role-card-check {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 1;
+    }
+
+    .role-card.selected .role-card-check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ─── Google Sign-In Button ────────────────────────────────────────── */
+    .google-auth-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 15px 24px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .google-auth-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(66,133,244,0.04), rgba(234,67,53,0.04));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .google-auth-btn:hover {
+      border-color: rgba(66, 133, 244, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(66, 133, 244, 0.1);
+    }
+
+    .google-auth-btn:hover::before {
+      opacity: 1;
+    }
+
+    .google-auth-btn:active {
+      transform: translateY(0);
+    }
+
+    .google-auth-btn svg {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .google-auth-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .google-auth-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* ─── Security Note ────────────────────────────────────────────────── */
+    .security-note {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: rgba(16, 185, 129, 0.04);
+      border: 1px solid rgba(16, 185, 129, 0.1);
+      border-radius: var(--radius-sm);
+      margin-top: 20px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .security-note i {
+      color: var(--primary-light);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    /* ─── Selected Role Badge ──────────────────────────────────────────── */
+    .selected-role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--primary-light);
+      margin-bottom: 24px;
+    }
+
+    .selected-role-badge i {
+      font-size: 0.75rem;
+    }
+
+    /* ─── Back Button ──────────────────────────────────────────────────── */
+    .back-step-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .back-step-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+
+    /* ─── Next Button ──────────────────────────────────────────────────── */
+    .next-step-btn {
+      width: 100%;
+      padding: 14px 24px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      box-shadow: 0 2px 12px var(--primary-glow);
+    }
+
+    .next-step-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px var(--primary-glow);
+      filter: brightness(1.1);
+    }
+
+    .next-step-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      filter: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-card" data-aos="fade-up" style="max-width:500px">
+      <div class="auth-header">
+        <div class="logo-icon">🏠</div>
+        <h2>Welcome to HomeRent Pro</h2>
+        <p>Sign in to continue</p>
+      </div>
+
+      <!-- Step Indicator -->
+      <div class="step-indicator" id="stepIndicator">
+        <div class="step-pill active" id="stepPill1">
+          <span class="step-num">1</span>
+          <span>Choose Role</span>
+        </div>
+        <div class="step-connector-line" id="stepLine1"></div>
+        <div class="step-pill" id="stepPill2">
+          <span class="step-num">2</span>
+          <span>Sign In</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <!--  STEP 1: Choose Role                                          -->
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <div class="auth-step active" id="authStep1">
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:20px;text-align:center">
+          How would you like to use HomeRent Pro?
+        </p>
+
+        <div class="role-selector-auth" id="roleSelector">
+          <div class="role-card" data-role="tenant" id="roleTenant">
+            <div class="role-card-check"><i class="fas fa-check"></i></div>
+            <div class="role-card-icon"><i class="fas fa-search"></i></div>
+            <div class="role-card-title">Tenant</div>
+            <div class="role-card-desc">Looking for a home to rent</div>
+          </div>
+          <div class="role-card" data-role="owner" id="roleOwner">
+            <div class="role-card-check"><i class="fas fa-check"></i></div>
+            <div class="role-card-icon"><i class="fas fa-building"></i></div>
+            <div class="role-card-title">Owner</div>
+            <div class="role-card-desc">List my properties for rent</div>
+          </div>
+        </div>
+
+        <button class="next-step-btn" id="nextToStep2Btn" disabled>
+          <span>Continue</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <!--  STEP 2: Google Sign-In                                       -->
+      <!-- ═══════════════════════════════════════════════════════════════ -->
+      <div class="auth-step" id="authStep2">
+        <div style="text-align:center;margin-bottom:8px">
+          <div class="selected-role-badge" id="selectedRoleBadge">
+            <i class="fas fa-user"></i>
+            <span id="selectedRoleText">Tenant</span>
+          </div>
+        </div>
+
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:24px;text-align:center">
+          Continue with your Google account to sign in or create a new account instantly.
+        </p>
+
+        <button type="button" class="google-auth-btn" id="googleSignInBtn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <div class="security-note">
+          <i class="fas fa-shield-halved"></i>
+          <span>Your Google account is used for secure authentication. We only access your name, email, and profile picture.</span>
+        </div>
+
+        <button class="back-step-btn" id="backToStep1Btn">
+          <i class="fas fa-arrow-left"></i>
+          <span>Change role</span>
+        </button>
+      </div>
+
+      <!-- Footer Links -->
+      <div style="text-align:center;margin-top:24px">
+        <a href="index.html" style="font-size:0.85rem;color:var(--text-muted)"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // ─── Config ──────────────────────────────────────────────────────────
+    const GOOGLE_CLIENT_ID = '749161783834-r30kmip0a8b13iqnam5t35vkofned4ae.apps.googleusercontent.coms';
+    let selectedRole = '';
+
+    // ─── Redirect if already logged in ──────────────────────────────────
+    if (isLoggedIn()) {
+      const user = getUser();
+      window.location.href = (user && user.role === 'owner') ? 'dashboard.html' : 'index.html';
+    }
+
+    // ─── Step 1: Role Selection ─────────────────────────────────────────
+    const roleCards = document.querySelectorAll('.role-card');
+    const nextBtn = document.getElementById('nextToStep2Btn');
+
+    roleCards.forEach(card => {
+      card.addEventListener('click', () => {
+        roleCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedRole = card.dataset.role;
+        nextBtn.disabled = false;
+      });
+    });
+
+    // ─── Step Navigation ────────────────────────────────────────────────
+    function goToStep(step) {
+      document.querySelectorAll('.auth-step').forEach(s => s.classList.remove('active'));
+      document.getElementById('authStep' + step).classList.add('active');
+
+      // Update step indicator
+      const pill1 = document.getElementById('stepPill1');
+      const pill2 = document.getElementById('stepPill2');
+      const line1 = document.getElementById('stepLine1');
+
+      if (step === 1) {
+        pill1.className = 'step-pill active';
+        pill2.className = 'step-pill';
+        line1.className = 'step-connector-line';
+      } else {
+        pill1.className = 'step-pill completed';
+        pill2.className = 'step-pill active';
+        line1.className = 'step-connector-line completed';
+
+        // Update role badge
+        const roleText = selectedRole === 'owner' ? 'Property Owner' : 'Tenant';
+        const roleIcon = selectedRole === 'owner' ? 'fas fa-building' : 'fas fa-search';
+        document.getElementById('selectedRoleText').textContent = roleText;
+        document.getElementById('selectedRoleBadge').querySelector('i').className = roleIcon;
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (!selectedRole) return;
+      goToStep(2);
+    });
+
+    document.getElementById('backToStep1Btn').addEventListener('click', () => {
+      goToStep(1);
+    });
+
+    // ─── Step 2: Google Sign-In ─────────────────────────────────────────
+    async function handleGoogleLogin(credential) {
+      const btn = document.getElementById('googleSignInBtn');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0 auto"></div>';
+      btn.disabled = true;
+
+      try {
+        const result = await apiGoogleAuth({ credential, role: selectedRole });
+
+        if (result.isNewUser) {
+          showToast('success', 'Account Created!', 'Welcome to HomeRent Pro, ' + result.user.name + '!');
+        } else {
+          showToast('success', 'Welcome Back!', 'Signed in with Google successfully.');
+        }
+
+        const user = getUser();
+        setTimeout(() => {
+          window.location.href = (user && user.role === 'owner') ? 'dashboard.html' : 'index.html';
+        }, 800);
+      } catch (err) {
+        showToast('error', 'Sign-In Failed', err.message);
+      } finally {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      }
+    }
+
+    function handleGoogleCredentialResponse(response) {
+      handleGoogleLogin(response.credential);
+    }
+
+    // Initialize Google Identity Services
+    window.addEventListener('load', () => {
+      if (typeof google !== 'undefined' && google.accounts) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleCredentialResponse,
+        });
+
+        const googleBtn = document.getElementById('googleSignInBtn');
+        googleBtn.addEventListener('click', () => {
+          google.accounts.id.prompt((notification) => {
+            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+              // Fallback: OAuth2 popup flow
+              const client = google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: 'email profile',
+                callback: async (tokenResponse) => {
+                  if (tokenResponse.access_token) {
+                    handleGoogleLogin(tokenResponse.access_token);
+                  }
+                }
+              });
+              client.requestAccessToken();
+            }
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

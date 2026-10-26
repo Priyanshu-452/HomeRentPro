@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages — HomeRent Pro</title>
+  <meta name="description" content="Chat with property owners and tenants on HomeRent Pro.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-content">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon">🏠</div>
+          <span class="logo-text">HomeRent Pro</span>
+        </a>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="add-room.html">List Property</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="nav-auth" style="display:flex;gap:8px;align-items:center;">
+          <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun"></i></button>
+          <div id="navAuth"></div>
+          <button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Messages -->
+  <section class="messages-page">
+    <div class="container">
+      <div class="section-header mb-3">
+        <h2 class="section-title"><i class="fas fa-comment-dots" style="color:var(--primary-light)"></i> <span>Messages</span></h2>
+      </div>
+
+      <div class="messages-layout">
+        <!-- Sidebar - Conversations -->
+        <div class="msg-sidebar">
+          <div class="msg-sidebar-header">
+            <h3>Conversations</h3>
+          </div>
+          <div id="conversationsList">
+            <div class="loading-overlay" style="padding:40px"><div class="spinner"></div></div>
+          </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="msg-chat" id="chatArea">
+          <div class="msg-chat-header" id="chatHeader" style="display:none"></div>
+          <div class="msg-chat-body" id="chatBody">
+            <div class="msg-empty">
+              <i class="fas fa-comment-dots"></i>
+              <h3>Select a Conversation</h3>
+              <p>Choose a conversation from the left to start messaging</p>
+            </div>
+          </div>
+          <div class="msg-chat-input" id="chatInputArea" style="display:none">
+            <input type="text" id="msgInput" placeholder="Type a message...">
+            <button class="btn btn-primary btn-icon" id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/messages.js"></script>
+</body>
+</html>

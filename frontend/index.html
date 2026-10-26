@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeRent Pro — Find Your Perfect Home</title>
+  <meta name="description" content="HomeRent Pro is a premium room rental platform to find, list, and book your perfect home. Browse verified listings with detailed reviews.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-content">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon">🏠</div>
+          <span class="logo-text">HomeRent Pro</span>
+        </a>
+
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="add-room.html">List Property</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-auth" style="display:flex;gap:8px;align-items:center;">
+          <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">
+            <i class="fas fa-sun"></i>
+          </button>
+          <div id="navAuth">
+            <a href="login.html" class="btn btn-ghost btn-sm">Sign In</a>
+            <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+          </div>
+          <button class="mobile-toggle" id="mobileToggle">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content" data-aos="fade-up">
+      <div class="hero-badge"><i class="fas fa-sparkles"></i> Premium Rental Platform</div>
+      <h1 class="hero-title">Discover Your<br><span>Dream Home</span> Today</h1>
+      <p class="hero-subtitle">Browse verified rental properties across India. View photos, read real reviews, and book your next home — all in one beautiful platform.</p>
+      <div class="hero-actions">
+        <a href="#search" class="btn btn-primary btn-lg"><i class="fas fa-search"></i> Explore Properties</a>
+        <a href="add-room.html" class="btn btn-outline btn-lg"><i class="fas fa-plus"></i> List Property</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">500+</div>
+          <div class="hero-stat-label">Properties</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">1200+</div>
+          <div class="hero-stat-label">Happy Tenants</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">50+</div>
+          <div class="hero-stat-label">Cities</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">4.8★</div>
+          <div class="hero-stat-label">User Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search & Filters -->
+  <section class="search-section" id="search">
+    <div class="container">
+      <div class="search-card">
+        <div class="search-row">
+          <div class="search-group">
+            <label>Location</label>
+            <input type="text" id="filterLocation" placeholder="e.g., Mumbai, Bandra...">
+          </div>
+          <div class="search-group">
+            <label>Min Price</label>
+            <input type="number" id="filterMinPrice" placeholder="₹ Min" min="0">
+          </div>
+          <div class="search-group">
+            <label>Max Price</label>
+            <input type="number" id="filterMaxPrice" placeholder="₹ Max" min="0">
+          </div>
+          <div class="search-group">
+            <label>BHK</label>
+            <select id="filterBhk">
+              <option value="">All</option>
+              <option value="1">1 BHK</option>
+              <option value="2">2 BHK</option>
+              <option value="3">3 BHK</option>
+              <option value="4">4+ BHK</option>
+            </select>
+          </div>
+          <div class="search-group">
+            <label>Furnishing</label>
+            <select id="filterFurnishing">
+              <option value="">All</option>
+              <option value="fully-furnished">Fully Furnished</option>
+              <option value="semi-furnished">Semi Furnished</option>
+              <option value="unfurnished">Unfurnished</option>
+            </select>
+          </div>
+          <div class="search-group" style="align-self:end">
+            <button class="btn btn-primary" onclick="applyFilters()"><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Rooms -->
+  <section class="rooms-section">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2 class="section-title">⭐ <span>Featured</span> Properties</h2>
+        <a href="#allRooms" class="btn btn-ghost btn-sm">View All <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div id="featuredRooms" class="rooms-grid"></div>
+    </div>
+  </section>
+
+  <!-- All Rooms -->
+  <section class="rooms-section" id="allRooms">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h2 class="section-title">🏘️ All <span>Properties</span></h2>
+      </div>
+      <div class="sort-bar">
+        <div id="resultsCount" class="results-count"></div>
+        <div class="sort-options">
+          <label>Sort by:</label>
+          <select id="sortSelect" onchange="changeSort(this.value)">
+            <option value="newest">Newest First</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+            <option value="popular">Most Popular</option>
+          </select>
+          <button class="btn btn-ghost btn-sm" onclick="resetFilters()" title="Reset filters"><i class="fas fa-undo"></i></button>
+        </div>
+      </div>
+      <div id="roomsList" class="rooms-grid"></div>
+      <div id="noRooms" class="empty-state hidden">
+        <i class="fas fa-search"></i>
+        <h3>No Properties Found</h3>
+        <p>Try adjusting your filters or search criteria.</p>
+        <button class="btn btn-primary" onclick="resetFilters()"><i class="fas fa-undo"></i> Reset Filters</button>
+      </div>
+      <div id="pagination" class="pagination"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo-text">🏠 HomeRent Pro</span>
+          <p>Your trusted partner for finding the perfect rental home. Premium listings, verified owners, and seamless booking.</p>
+          <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="add-room.html">List Property</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+            <li><a href="login.html">Login</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>For Owners</h4>
+          <ul>
+            <li><a href="register.html">Register as Owner</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="add-room.html">Add Property</a></li>
+            <li><a href="bookings.html">Manage Bookings</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="contact.html">Help Center</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 HomeRent Pro. All rights reserved. Made with ❤️ in India.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFeaturedRooms();
+      loadRooms();
+    });
+  </script>
+</body>
+</html>

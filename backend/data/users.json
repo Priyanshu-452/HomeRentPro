@@ -1,0 +1,92 @@
+[
+  {
+    "id": "372d0a4b-160f-476f-b162-4bc6475f50f2",
+    "name": "test",
+    "email": "ayush@gmail.com",
+    "phone": "6266898048",
+    "password": "scrypt:32768:8:1$Qy8Q8ROla8DD84DD$d0e0153ace665cb4912545febe86a8155995f3bfebb959b949539d937332cf65606938708e5075513f88fae819c25454e9ef3132e314d2da3b11cc6e8883a303",
+    "role": "owner",
+    "avatar": "",
+    "bio": "",
+    "createdAt": "2026-04-13T12:42:25.093571"
+  },
+  {
+    "id": "69336c0d-c066-424a-82e5-cd649e81125d",
+    "name": "w1s",
+    "email": "ayushl@gmail.com",
+    "phone": "626689045",
+    "password": "scrypt:32768:8:1$T8V5ndiYWChS5rXu$309dfe046a06f92d7b57aa0ca92ffbc0d581f75209971d62cb950be872c67258891e715f405f10e07d11a7240274250f1f579e8f07e13b00e435acde59d5f826",
+    "role": "tenant",
+    "avatar": "",
+    "bio": "",
+    "createdAt": "2026-04-13T12:43:13.877732"
+  },
+  {
+    "id": "47054704-ec23-4ee3-9ef4-c42bb7b453eb",
+    "name": "Akash",
+    "email": "akash@gmail.com",
+    "phone": "7896541230",
+    "password": "scrypt:32768:8:1$PflpiwHgYASmDDhy$742909b024c7f1e0ed502a2a9b4e5b4c1ba4ad07ca734e4883b093a22fc15290f6aa8da6711a451d1e26c059f5a7c5fc910a3b78e17f4e70b42a0322bb27f84c",
+    "role": "owner",
+    "avatar": "",
+    "bio": "",
+    "createdAt": "2026-04-13T20:12:21.458166"
+  },
+  {
+    "id": "c84d681d-4961-4b71-9363-8c490f743649",
+    "name": "test",
+    "email": "example@gmail.com",
+    "phone": "7412589630",
+    "password": "scrypt:32768:8:1$XqVkhyt8rO132Okt$c489d2f13e0be02f4f2bfb252c37fe990bfb8d51c73be41ad0e1b25a8ada6932b89da82f91dc517090d6025ac9e3c0ed5dcff81c9a995094ab7dd0f3ce57327f",
+    "role": "tenant",
+    "avatar": "",
+    "bio": "",
+    "createdAt": "2026-04-13T20:45:13.532328"
+  },
+  {
+    "id": "5b13aef3-874b-4d2b-92e0-2787bafab669",
+    "name": "priya",
+    "email": "priyanshu@gmail.com",
+    "phone": "9893718523",
+    "password": "scrypt:32768:8:1$TZyXaWLnVxXiluTq$201ce29edcf024fc63f7ac729702747c64dd7b30d7445fb92ef8f5aeff9f07714707f100511509c1dcdf8b82e1721f707e43c2471d7ed88653b8dc7423623d64",
+    "role": "tenant",
+    "avatar": "",
+    "bio": "",
+    "createdAt": "2026-04-16T11:53:25.524836"
+  },
+  {
+    "id": "38f7766b-500b-4a33-a618-3a6034fdfe25",
+    "name": "Akash",
+    "email": "abcd@gmail.com",
+    "phone": "8521479630",
+    "password": "scrypt:32768:8:1$xmMUXEKyomdC5JPB$b9ea39bd9de589cf233a6158d7203e9a19ce1edc741694df2adbae33099355d11beb5405a40b34bcd82144005235164d2c875bf243c0332e4ddc2d0ec44d5eeb",
+    "role": "owner",
+    "avatar": "",
+    "bio": "",
+    "createdAt": "2026-04-16T11:59:00.958797"
+  },
+  {
+    "id": "159958b3-e844-426a-b3b8-71192af2f182",
+    "name": "\u00c3\u0137\u0137\u0169",
+    "email": "akkumali411@gmail.com",
+    "phone": "",
+    "password": "scrypt:32768:8:1$wyOj3ayrDrAMveAy$eb957a41be0588eb559ee69cc7323b855c7aa518e55c66aa069961a94b4c59a8e35b950325dc9d7337c534c077a7a47e2d7888fb14d49671e05cb19b3670ac84",
+    "role": "tenant",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocKoTVhhMwHGZdLDZam_Il6-eb3pvHHAevsColb83Vy5pVuuMJA=s96-c",
+    "bio": "",
+    "authProvider": "google",
+    "createdAt": "2026-04-17T10:09:20.534653"
+  },
+  {
+    "id": "e7d86ba7-1670-4d1e-806d-58d679e5b444",
+    "name": "Akash Mali",
+    "email": "ak9893718536@gmail.com",
+    "phone": "",
+    "password": "scrypt:32768:8:1$2EutkJRCHHlita72$f386c55dac90ab4623edd25efed280a9d138fe123421ae74b37a78075bf6305f9710d84c0c23036de21aa4d7a690bb77f92e2b0e3959f8e46bf6585bcce9391b",
+    "role": "owner",
+    "avatar": "https://lh3.googleusercontent.com/a/ACg8ocIKCVc0a5iHiPa5D3O-K6UHnZ_rAE9OYi0HphuDPjy4qPBq5wrjEw=s96-c",
+    "bio": "",
+    "authProvider": "google",
+    "createdAt": "2026-04-17T10:23:43.439665"
+  }
+]

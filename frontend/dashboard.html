@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — HomeRent Pro</title>
+  <meta name="description" content="Manage your properties, bookings, and review your performance on HomeRent Pro.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-content">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon">🏠</div>
+          <span class="logo-text">HomeRent Pro</span>
+        </a>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="add-room.html">List Property</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="nav-auth" style="display:flex;gap:8px;align-items:center;">
+          <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun"></i></button>
+          <div id="navAuth"></div>
+          <button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Dashboard -->
+  <section class="dashboard-page">
+    <div class="container">
+      <div class="section-header mb-3">
+        <h2 class="section-title"><i class="fas fa-chart-line" style="color:var(--primary-light)"></i> Owner <span>Dashboard</span></h2>
+        <a href="add-room.html" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Property</a>
+      </div>
+
+      <!-- Stats -->
+      <div id="statsGrid" class="stats-grid">
+        <div class="skeleton-card" style="height:150px"><div class="skeleton" style="height:100%"></div></div>
+        <div class="skeleton-card" style="height:150px"><div class="skeleton" style="height:100%"></div></div>
+        <div class="skeleton-card" style="height:150px"><div class="skeleton" style="height:100%"></div></div>
+        <div class="skeleton-card" style="height:150px"><div class="skeleton" style="height:100%"></div></div>
+      </div>
+
+      <!-- My Rooms -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <h3 class="dash-card-title"><i class="fas fa-home" style="color:var(--primary-light)"></i> My Properties</h3>
+          <a href="add-room.html" class="btn btn-ghost btn-sm"><i class="fas fa-plus"></i> Add New</a>
+        </div>
+        <div id="myRoomsList">
+          <div class="loading-overlay"><div class="spinner"></div><p>Loading...</p></div>
+        </div>
+      </div>
+
+      <!-- Booking Requests -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <h3 class="dash-card-title"><i class="fas fa-calendar-check" style="color:var(--success)"></i> Booking Requests</h3>
+          <a href="bookings.html" class="btn btn-ghost btn-sm">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div id="bookingRequests">
+          <div class="loading-overlay"><div class="spinner"></div><p>Loading...</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 HomeRent Pro. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Property — HomeRent Pro</title>
+  <meta name="description" content="List your property on HomeRent Pro and connect with verified tenants.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <div class="nav-content">
+        <a href="index.html" class="nav-logo">
+          <div class="logo-icon">🏠</div>
+          <span class="logo-text">HomeRent Pro</span>
+        </a>
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="add-room.html" class="active">List Property</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="nav-auth" style="display:flex;gap:8px;align-items:center;">
+          <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()"><i class="fas fa-sun"></i></button>
+          <div id="navAuth"></div>
+          <button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Add Room Form -->
+  <section class="add-room-page">
+    <div class="container">
+      <div class="add-room-card">
+        <h2><i class="fas fa-plus-circle" style="color:var(--primary-light)"></i> List Your Property</h2>
+
+        <!-- Step Progress -->
+        <div class="step-progress">
+          <div class="step-item active">
+            <div class="step-circle">1</div>
+            <div class="step-label">Basic Info</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-item">
+            <div class="step-circle">2</div>
+            <div class="step-label">Details</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step-item">
+            <div class="step-circle">3</div>
+            <div class="step-label">Media & Contact</div>
+          </div>
+        </div>
+
+        <form id="addRoomForm">
+          <!-- Step 1: Basic Info -->
+          <div class="step-content active">
+            <div class="form-group">
+              <label for="roomName">Property Name *</label>
+              <input type="text" id="roomName" placeholder="e.g., Luxurious Sea-View Apartment" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="price">Monthly Rent (₹) *</label>
+                <input type="number" id="price" placeholder="e.g., 25000" required min="0" step="500">
+              </div>
+              <div class="form-group">
+                <label for="bhk">BHK *</label>
+                <select id="bhk" required>
+                  <option value="">Select BHK</option>
+                  <option value="1">1 BHK</option>
+                  <option value="2">2 BHK</option>
+                  <option value="3">3 BHK</option>
+                  <option value="4">4+ BHK</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="location">Location *</label>
+                <input type="text" id="location" placeholder="e.g., Mumbai, Bandra West" required>
+              </div>
+              <div class="form-group">
+                <label for="area">Area (Sq. Ft.) *</label>
+                <input type="number" id="area" placeholder="e.g., 1200" required min="0" step="10">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="furnishing">Furnishing Type</label>
+              <select id="furnishing">
+                <option value="unfurnished">Unfurnished</option>
+                <option value="semi-furnished">Semi Furnished</option>
+                <option value="fully-furnished">Fully Furnished</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Step 2: Details -->
+          <div class="step-content">
+            <div class="form-group">
+              <label for="description">Description *</label>
+              <textarea id="description" rows="5" placeholder="Describe your property in detail — condition, features, surroundings, nearby landmarks..." required></textarea>
+            </div>
+            <div class="form-group">
+              <label>Amenities</label>
+              <div class="amenities-checkbox-grid">
+                <div class="amenity-checkbox" data-amenity="WiFi"><i class="fas fa-wifi"></i> WiFi</div>
+                <div class="amenity-checkbox" data-amenity="AC"><i class="fas fa-snowflake"></i> AC</div>
+                <div class="amenity-checkbox" data-amenity="Parking"><i class="fas fa-car"></i> Parking</div>
+                <div class="amenity-checkbox" data-amenity="Balcony"><i class="fas fa-door-open"></i> Balcony</div>
+                <div class="amenity-checkbox" data-amenity="Gym"><i class="fas fa-dumbbell"></i> Gym</div>
+                <div class="amenity-checkbox" data-amenity="Swimming Pool"><i class="fas fa-swimmer"></i> Pool</div>
+                <div class="amenity-checkbox" data-amenity="Security"><i class="fas fa-shield-alt"></i> Security</div>
+                <div class="amenity-checkbox" data-amenity="Power Backup"><i class="fas fa-bolt"></i> Power Backup</div>
+                <div class="amenity-checkbox" data-amenity="Lift"><i class="fas fa-building"></i> Lift</div>
+                <div class="amenity-checkbox" data-amenity="Garden"><i class="fas fa-leaf"></i> Garden</div>
+                <div class="amenity-checkbox" data-amenity="Laundry"><i class="fas fa-tshirt"></i> Laundry</div>
+                <div class="amenity-checkbox" data-amenity="Water Supply"><i class="fas fa-tint"></i> Water 24/7</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Media & Contact -->
+          <div class="step-content">
+            <div class="form-group">
+              <label>Property Images (URLs)</label>
+              <div class="image-urls-list" id="imageUrlsList">
+                <div class="image-url-row">
+                  <input type="url" class="image-url-input" placeholder="https://example.com/image1.jpg">
+                </div>
+              </div>
+              <button type="button" class="add-image-btn mt-1" id="addImageUrl"><i class="fas fa-plus"></i> Add Another Image</button>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact">Contact Number</label>
+                <input type="tel" id="contact" placeholder="+91 98765 43210">
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="owner@example.com">
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="form-actions">
+            <button type="button" id="prevBtn" class="btn btn-secondary" onclick="prevStep()" style="display:none"><i class="fas fa-arrow-left"></i> Previous</button>
+            <button type="button" id="nextBtn" class="btn btn-primary" onclick="nextStep()">Next <i class="fas fa-arrow-right"></i></button>
+            <button type="submit" id="submitBtn" class="btn btn-primary" style="display:none"><i class="fas fa-check"></i> List Property</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2026 HomeRent Pro. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/add-room.js"></script>
+</body>
+</html>
